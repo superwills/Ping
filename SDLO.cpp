@@ -69,6 +69,9 @@ void SDL::fillRect( int x, int y, int w, int h, SDL_Color color )
 
 void SDL::playMusic( string musicFile )
 {
+	/// stop all other music
+	Mix_HaltMusic();
+
 	if( musics.find(musicFile) == musics.end() )
 	{
 		loadMusic( musicFile );

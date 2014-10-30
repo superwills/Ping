@@ -3,15 +3,23 @@
 
 Ball::Ball(float size, string iname):Sprite( iname )
 {
+	lastStartSpeed = 2;
 	rect.w = rect.h = size;
 	color.b = 0;
 }
 
+void Ball::saveLastStartSpeed()
+{
+	lastStartSpeed = vel.len();
+}
+
 void Ball::move()
 {
+	vel *= 1.0001f;
+
+	// If the x-movement speed is too slow, make it -1 or +1
 	if( fabsf( vel.x ) < 1 )
 		vel.x = signum(vel.x);
-	//if( !vel.x ) vel.x = randFloat( -1, 1 );
 	rect.xy() += vel;
 	
 	// don't exit top or bottom
@@ -19,12 +27,10 @@ void Ball::move()
 	
 	if( rect.left() < 0 )
 	{
-		// right player score
-		game->leftPlayerScored();
+		game->rightPlayerScored();
 	}
 	if( rect.right() > sdl->getSize().x )
 	{
-		game->rightPlayerScored();
+		game->leftPlayerScored();
 	}
-
 }

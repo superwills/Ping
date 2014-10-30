@@ -121,6 +121,13 @@ union Vector2f
 	inline float len2() const {
 		return x*x+y*y ;
 	}
+	inline Vector2f& setLen( float iLen ){
+		if( float length = len() )
+		{
+			*this *= iLen / length;
+		}
+		return *this;
+	}
 	inline Vector2f normalizedCopy() const {
 		return Vector2f( *this ).normalize() ;
 	}

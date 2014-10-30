@@ -11,8 +11,8 @@
 class Game
 {
 public:
-	enum GameState { Title, Running, Paused, Exiting };
-
+	enum GameState { Title, Running, JustScored, Paused, Exiting };
+	
 private:
 	// The SDL object, which allows us to draw and play sounds
 	SDL* sdl;
@@ -21,7 +21,9 @@ private:
 	Paddle* leftPaddle;
 	Paddle* rightPaddle;
 	Ball* ball;
+	Sprite* title, *pausedText;
 	SDL_Color bkgColor;	// the current background color
+	int flashesRem;
 
 	// Keeping track of scores
 	int leftScoreValue, rightScoreValue;
@@ -41,13 +43,14 @@ public:
 	~Game();
 	void leftPlayerScored();
 	void rightPlayerScored();
-
-	// change fsm state
 	GameState getState();
+	// change fsm state
 	void setState( GameState newState );
+	void togglePause();
 	void resetBall();
 	void drawScores();
 	void checkForCollisions();
+	void runGame();
 	void update();
 	void draw();
 };

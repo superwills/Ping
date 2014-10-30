@@ -31,6 +31,14 @@ int main(int argc, char* args[])
 				// the game will exit on the next frame
 				game.setState( Game::Exiting );
 			}
+			else if( e.type == SDL_KEYDOWN && e.key.keysym.scancode == SDL_SCANCODE_P )
+			{
+				game.togglePause();
+			}
+			else if( e.type == SDL_KEYDOWN && game.getState() == Game::Title )
+			{
+				game.setState( Game::Running );
+			}
 		}
 		
 		// Update the game, move the sprites, etc
@@ -39,7 +47,7 @@ int main(int argc, char* args[])
 		// Draw out the new state
 		game.draw();
 	}
-
+	
 	return 0;
 }
 

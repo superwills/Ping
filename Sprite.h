@@ -30,6 +30,8 @@ public:
 	// Texture, if any
 	SDL_Texture* tex;
 	
+	bool hidden;
+
 	void defaults();
 	Sprite(string iname);
 	Sprite(string iname, SDL_Texture* iTex);
@@ -51,6 +53,8 @@ public:
 	void scale( float s );
 	void boundTB();
 	void boundLR();
+	void show();
+	void hide();
 	virtual void move();
 	virtual void draw();
 	

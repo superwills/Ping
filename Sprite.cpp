@@ -1,12 +1,14 @@
 #include "Sprite.h"
 #include "Game.h"
+#include "Colors.h"
 
 SDL* Sprite::sdl;
 Game* Sprite::game;
 
 void Sprite::defaults()
 {
-	color.r = color.g = color.b = color.a = 255;
+	color = SDL_ColorMake( 255, 255, 255, 255 );
+	hidden = false;
 }
 
 Sprite::Sprite(string iname)
@@ -101,6 +103,16 @@ void Sprite::boundLR()
 	}
 }
 
+void Sprite::show()
+{
+	hidden = false;
+}
+
+void Sprite::hide()
+{
+	hidden = true;
+}
+
 void Sprite::move()
 {
 	rect.xy() += vel;
@@ -110,6 +122,10 @@ void Sprite::move()
 
 void Sprite::draw()
 {
+	if( hidden )
+		return ; // just don't draw
+	
+	sdl->setColor( color );
 	if( !tex )
 	{
 		// no texture, so draw a solid rect
@@ -129,4 +145,3 @@ void Sprite::retrieveTexSize()
 	SDL_QueryTexture( tex, 0, 0, &w, &h );
 	rect.w=w, rect.h=h;
 }
-
