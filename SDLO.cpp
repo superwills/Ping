@@ -71,17 +71,18 @@ void SDL::playMusic( string musicFile )
 {
 	if( musics.find(musicFile) == musics.end() )
 	{
-		error( "Sound %s not found!", musicFile.c_str() );
-		return;
+		loadMusic( musicFile );
 	}
+
+	Mix_PlayMusic( musics[musicFile], -1 );
 }
 
 void SDL::playSound( string soundFile )
 {
 	if( sfx.find(soundFile) == sfx.end() )
 	{
-		error( "Sound %s not found!", soundFile.c_str() );
-		return;
+		warning( "Sound %s not yet loaded!", soundFile.c_str() );
+		loadWavSound( soundFile );
 	}
 
 	Mix_PlayChannel( -1, sfx[soundFile], 0 ) ;
@@ -147,8 +148,9 @@ Mix_Chunk* SDL::loadWavSound( string waveFilename )
 	if( sfx.find(waveFilename) != sfx.end() )
 	{
 		error( "Sound `%s` already loaded", waveFilename.c_str() );
-		return 0;
+		return sfx[waveFilename];
 	}
+
 	Mix_Chunk *sound = Mix_LoadWAV( waveFilename.c_str() ) ;
 	sfx[waveFilename] = sound;
 	return sound;

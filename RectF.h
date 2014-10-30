@@ -1,19 +1,10 @@
 #ifndef RECTF_H
 #define RECTF_H
 
-// A RECTF is supposed to be MEASURED IN POINTS.
-// You can convert a PTS x,y,w,h value to
-// CANONICAL COORDS based on the SIZE OF THE VIEWPORT
-// YOU INTEND TO DRAW INTO.  Canonical coords are converted
-// by OpenGL into the PX space.
-// PTS => CANONICAL COORDS => PX
-//
-// Touch events are in PTS,
 struct RectF
 {
-  // x,y is TOP LEFT corner
+  // x,y is TOP LEFT corner of the rectangle
   float x,y,w,h ;
-  static float DW, DH ; 
   
   RectF():x(0),y(0),w(0),h(0){}
   RectF( float ixPts, float iyPts, float iwPts, float ihPts ):x(ixPts),y(iyPts),w(iwPts),h(ihPts){}
@@ -37,13 +28,13 @@ struct RectF
   }
   
   inline bool hit( const Vector2f& v ) const {
-    return ( v.x >= left() && v.x <= right() && v.y >= bottom() && v.y <= top() ) ;
+    return ( v.x >= left() && v.x <= right() && v.y <= bottom() && v.y >= top() ) ;
   }
   inline bool hitX( float ix ) const {
     return ( ix >= left() && ix <= right() ) ;
   }
   inline bool hitY( float iy ) const {
-    return ( iy >= bottom() && iy <= top() ) ;
+    return ( iy <= bottom() && iy >= top() ) ;
   }
   
   inline bool hit( const RectF& o ) const {
@@ -74,9 +65,9 @@ struct RectF
       dist.x = o.right() - left() ; // --- I have to go -x to reach o
       
     if( isBelowOf( o ) )
-      dist.y = o.bottom() - top() ; // +++ I have to go +y to reach o
+      dist.y = top() - o.bottom(); // +++ I have to go +y to reach o
     else if( isOnTopOf( o ) )
-      dist.y = o.top() - bottom() ; // --- I have to go -y to reach o
+      dist.y = bottom() - o.top(); // --- I have to go -y to reach o
       
     return dist ;
   }
@@ -101,13 +92,13 @@ struct RectF
   }
   
   inline bool isBelowOf( const RectF& o ) const {
-    // my top is less than your bottom
-    return top() < o.bottom() ;
+    // top below o's bottom
+    return top() > o.bottom() ;
   }
   
   inline bool isOnTopOf( const RectF& o ) const {
-    // my bottom wall is bigger than your top wall
-    return bottom() > o.top() ;
+    // bottom on top of o's top
+    return bottom() < o.top() ;
   }
   
   // Default considers origin BOTTOM LEFT.
@@ -203,12 +194,10 @@ struct RectF
   
   inline RectF& setTop( float t ) {
 	y = t ;//tl corner
-	//h = t-y;// bl corner
     return *this ;
   }
   inline RectF& setBottom( float b ) {
 	h = b-y ; // tl corner
-    //y=b; // bl corner
     return *this ;
   }
   inline RectF& setLeft( float l ) {
@@ -240,12 +229,10 @@ struct RectF
   }
   inline RectF& expandTop( float t ) {
     y = min( y, t ) ;//tl corner
-    //h = max( h, t-y ) ;// bl corner
     return *this ;
   }
   inline RectF& expandBottom( float b ) {
     h = max( b-y, h ); // tl corner
-    //y = min( y, b ) ;//bl corner
     return *this ;
   }
   
@@ -258,7 +245,6 @@ struct RectF
   
   // Expands THIS to contain O completely.
   inline RectF& expand( const RectF& o ) {
-    ///*
     // THis is more complicated than just doing min/max
     // because max depends on min (because of width parameter).
     // You have to find the maximal span 
@@ -273,20 +259,6 @@ struct RectF
     float minBot = min( y, o.y ) ;
     h = maxTop - minBot ;
     y = min( y, o.y ) ;
-    //*/
-    
-    /*
-    // another way to do it:
-    // PUsh min by min of other box.
-    // Min may be no larger than bottomLeft
-    Vector2f min = pos() ;
-    min.clampAbove( o.bottomLeft() ) ;
-    
-    Vector2f max = pos() + size() ;
-    // Max may be no smaller than topRight
-    max.clampBelow( o.topRight() ) ;
-    setMinMax( min,max ) ;
-    */
     return *this ;
   }
   
@@ -367,8 +339,7 @@ struct RectF
   inline RectF subTopLeft( float mx, float my, float newWidth, float newHeight ) const {
     return RectF( left()+mx, top()-(my+newHeight), newWidth, newHeight ) ;
   }
-  
-  
+    
   inline RectF subBottomRight( float mx, float my, float newWidth, float newHeight ) const {
     return RectF( right()-(mx+newWidth), bottom()+my, newWidth, newHeight ) ;
   }
@@ -376,8 +347,6 @@ struct RectF
   inline RectF subBottomLeft( float mx, float my, float newWidth, float newHeight ) const {
     return RectF( left()+mx, bottom()+my, newWidth, newHeight ) ;
   }
-  
-  
   
   // Quad split, 
   void subQuad( RectF subrectsTlTrBrBl[4] ) const
@@ -396,17 +365,5 @@ struct RectF
     this->println( "" ) ;
   }
 } ;
-
-
-// bounds % 20 or 20%bounds takes 20% of bounds
-inline RectF operator%( RectF rect, const Vector2f& percentage ) {
-  Vector2f amt = rect.size()*(1.f-percentage/100.f) ;
-  return rect.pad( -amt ) ;
-}
-
-inline RectF operator%( const Vector2f& percentage, RectF rect ) {
-  Vector2f amt = rect.size()*(1.f-percentage/100.f) ;
-  return rect.pad( -amt ) ;
-}
 
 #endif

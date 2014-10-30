@@ -9,7 +9,9 @@ Ball::Ball(float size, string iname):Sprite( iname )
 
 void Ball::move()
 {
-	if( !vel.x ) vel.x = randFloat( -1, 1 );
+	if( fabsf( vel.x ) < 1 )
+		vel.x = signum(vel.x);
+	//if( !vel.x ) vel.x = randFloat( -1, 1 );
 	rect.xy() += vel;
 	
 	// don't exit top or bottom
@@ -25,18 +27,4 @@ void Ball::move()
 		game->rightPlayerScored();
 	}
 
-	// hitting the paddles
-	if( rect.hit( game->getLeftPaddle()->rect ) )
-	{
-		puts( "Ping" ) ;
-		vel.x = -vel.x;
-		vel *= 1.1f;
-	}
-
-	if( rect.hit( game->getRightPaddle()->rect ) )
-	{
-		puts( "Pong" ) ;
-		vel.x = -vel.x;
-		vel *= 1.1f;
-	}
 }

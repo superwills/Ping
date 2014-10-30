@@ -9,49 +9,30 @@ using namespace std;
 
 int main(int argc, char* args[])
 {
-	srand(time(0));	
+	// Seed the random number generator with the __application start__ time.
+	// This ensures random numbers are truly random, not just fixed.
+	srand(time(0));
+
+	// Create our SDL window, name it "Ping"
 	SDL sdl( "Ping", 800, 600 );
+
+	// Construct our Game object, to retain gamestate information
 	Game game( sdl );
-	bool gameRunning = true;
-	
+
 	// Game Loop: http://gameprogrammingpatterns.com/game-loop.html
-	while( gameRunning )
+	while( game.getState() != Game::Exiting )
 	{
 		// Read controller input
 		SDL_Event e;
 		while( SDL_PollEvent( &e ) != 0 )
 		{
-			if( e.type == SDL_QUIT )
+			if( e.type == SDL_QUIT || e.key.keysym.scancode == SDL_SCANCODE_ESCAPE )
 			{
-				gameRunning = false;
-			}
-			else if( e.type == SDL_KEYDOWN )
-			{
-				switch( e.key.keysym.scancode )
-				{
-				case SDL_SCANCODE_ESCAPE:
-					gameRunning=false;
-					break;
-				}
+				// the game will exit on the next frame
+				game.setState( Game::Exiting );
 			}
 		}
 		
-		int x,y;
-		SDL_GetRelativeMouseState( &x, &y );
-		if( y < 0 )
-			game.getRightPaddle()->moveUp();
-		else if( y > 0 )
-			game.getRightPaddle()->moveDown();
-
-		const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-		if( keystate[SDL_SCANCODE_UP] )
-		{
-			game.getLeftPaddle()->moveUp();
-		}
-		if( keystate[SDL_SCANCODE_DOWN] )
-		{
-			game.getLeftPaddle()->moveDown();
-		}
 		// Update the game, move the sprites, etc
 		game.update();
 

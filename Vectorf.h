@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include <float.h>
-#define _USE_MATH_DEFINES
 #include <math.h>
 #include "StdWilUtil.h"
 #include "math_ext.h"

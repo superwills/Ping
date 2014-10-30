@@ -211,6 +211,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Controller.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Controller.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SDLO.cpp"
 				>
 			</File>

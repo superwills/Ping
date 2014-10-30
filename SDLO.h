@@ -42,6 +42,7 @@ public:
 		return size;
 	}
 	void setColor( SDL_Color color );
+
 	// Draws you a simple line
 	void line( int startX, int startY, int endX, int endY, SDL_Color color );
 	void rect( int x, int y, int w, int h, SDL_Color color );
