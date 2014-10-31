@@ -7,6 +7,7 @@
 #include "Paddle.h"
 #include "Ball.h"
 #include "Controller.h"
+#include "TitleScreen.h"
 
 class Game
 {
@@ -21,7 +22,8 @@ private:
 	Paddle* leftPaddle;
 	Paddle* rightPaddle;
 	Ball* ball;
-	Sprite* title, *pausedText;
+	TitleScreen* title;
+	Sprite* pausedText;
 	SDL_Color bkgColor;	// the current background color
 	int flashesRem;
 

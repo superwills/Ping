@@ -10,6 +10,7 @@ public:
 	int mouseX, mouseY;
 	const Uint8 *keystate;
 	Controller();
+	// Updates the controller -- call once per frame
 	void update();
 };
 

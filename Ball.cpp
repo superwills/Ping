@@ -13,11 +13,11 @@ void Ball::saveLastStartSpeed()
 	lastStartSpeed = vel.len();
 }
 
-void Ball::move()
+void Ball::update()
 {
 	vel *= 1.0001f;
 
-	// If the x-movement speed is too slow, make it -1 or +1
+	// If the x-update()ment speed is too slow, make it -1 or +1
 	if( fabsf( vel.x ) < 1 )
 		vel.x = signum(vel.x);
 	rect.xy() += vel;

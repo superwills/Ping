@@ -122,6 +122,7 @@ SDL_Texture* SDL::loadTexture( string filename )
 	}
 
 	SDL_Texture* tex = SDL_CreateTextureFromSurface( renderer, loadSurface(filename) );
+	SDL_SetTextureBlendMode( tex, SDL_BLENDMODE_BLEND );
 	texes[ filename ] = tex;
 	return tex;
 }

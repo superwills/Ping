@@ -128,6 +128,16 @@ union Vector2f
 		}
 		return *this;
 	}
+	inline Vector2f& setAngle( float a ){
+		// put on x-axis
+		x = len();
+		
+		// now rotate
+		float newX = x * cosf( a );
+		float newY = x * sinf( a );
+		x=newX, y=newY;
+		return *this;
+	}
 	inline Vector2f normalizedCopy() const {
 		return Vector2f( *this ).normalize() ;
 	}

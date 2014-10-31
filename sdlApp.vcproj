@@ -198,6 +198,14 @@
 				RelativePath=".\Paddle.h"
 				>
 			</File>
+			<File
+				RelativePath=".\TitleScreen.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TitleScreen.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="SDL"

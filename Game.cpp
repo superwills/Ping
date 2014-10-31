@@ -30,8 +30,7 @@ Game::Game( SDL& iSdl ):
 
 	leftPaddle = new Paddle( Vector2f(25,100), 10, "left paddle" );
 	rightPaddle = new Paddle( Vector2f(25,100), 10, "right paddle" );
-	title = new Sprite( "title", "title.png" );
-	title->color = Black;
+	title = new TitleScreen( "title", "title.png" );
 	pausedText = Sprite::Text( font, "pause", SDL_ColorMake( 200, 200, 0, 200 ) );
 	pausedText->setCenter( sdl->getSize()/2 );
 
@@ -47,8 +46,10 @@ Game::Game( SDL& iSdl ):
 	
 	// load the sfx. These sfx were created with SFXR
 	// http://www.drpetter.se/project_sfxr.html
-	sdl->loadWavSound( "ping.wav" );
+	sdl->loadWavSound( "ping0.wav" );
 	sdl->loadWavSound( "ping1.wav" );
+	sdl->loadWavSound( "ping2.wav" );
+	sdl->loadWavSound( "ping3.wav" );
 	sdl->loadWavSound( "win.wav" );
 	
 	setState( Title );
@@ -97,15 +98,15 @@ void Game::setState( GameState newState )
 		// if prevstate was Running, don't restart the music
 		if( prevState == Paused )
 		{
-			info( "Music unpaused" );
 			Mix_ResumeMusic(); // unpause the music
 		}
 		else if( prevState != JustScored )
+		{
 			sdl->playMusic( "song 81 6.flac" );
+		}
 		break;
 
 	case Paused:
-		info( "Music paused" );
 		Mix_PauseMusic();
 		break;
 
@@ -120,13 +121,11 @@ void Game::togglePause()
 {
 	if( gameState == Paused )
 	{
-		puts( "Unpause" );
 		setState( Running );
 		pausedText->hide();
 	}
 	else
 	{
-		puts( "Pause" );
 		setState( Paused );
 		pausedText->show();
 	}
@@ -142,15 +141,21 @@ void Game::resetBall()
 
 void Game::drawScores()
 {
-	if( leftScoreSprite ) delete leftScoreSprite;
+	if( leftScoreSprite )
+	{
+		delete leftScoreSprite;
+	}
 	leftScoreSprite = Sprite::Text( font, makeString( "%d", leftScoreValue ), White );
-	leftScoreSprite->scale( 0.25f );
+	leftScoreSprite->scale( 0.48f );
 	leftScoreSprite->setCenter( sdl->getSize().x/2 - leftScoreSprite->rect.w,
 		leftScoreSprite->rect.h/2 );
 
-	if( rightScoreSprite ) delete rightScoreSprite;
+	if( rightScoreSprite )
+	{
+		delete rightScoreSprite;
+	}
 	rightScoreSprite = Sprite::Text( font, makeString( "%d", rightScoreValue ), White );
-	rightScoreSprite->scale( 0.25f );
+	rightScoreSprite->scale( 0.48f );
 	rightScoreSprite->setCenter( sdl->getSize().x/2 + rightScoreSprite->rect.w,
 		rightScoreSprite->rect.h/2 );
 }
@@ -161,25 +166,37 @@ void Game::checkForCollisions()
 	// check the ball's rect against the paddle's rects
 	if( ball->rect.hit( leftPaddle->rect ) )
 	{
-		sdl->playSound( "ping.wav" );
+		sdl->playSound( makeString( "ping%d.wav", randInt(0,4) ) );
+		
+		// Push the ball off the paddle, so they don't interpenetrate
 		float overlap = leftPaddle->rect.right() - ball->rect.left();
 		ball->rect.x += overlap;
+
+		// let the bounce angle be proportional to distance from center paddle
+		float y = ball->rect.centroid().y - leftPaddle->rect.centroid().y;
+		float a = M_PI/2.f * y/leftPaddle->rect.h;
+		ball->vel.setAngle( a );
+		
 		ballHit = true;
 	}
 
 	if( ball->rect.hit( rightPaddle->rect ) )
 	{
-		sdl->playSound( "ping1.wav" );
+		sdl->playSound( makeString( "ping%d.wav", randInt(0,4) ) );
 		float overlap = rightPaddle->rect.left() - ball->rect.right();
 		ball->rect.x += overlap;
+		
+		float y = rightPaddle->rect.centroid().y - ball->rect.centroid().y;
+		float a = M_PI + M_PI/2.f * y/rightPaddle->rect.h;
+		ball->vel.setAngle( a );
+		
 		ballHit = true;
 	}
 
 	// when the ball is hit the ball bounces and speeds up a bit
 	if( ballHit )
 	{
-		ball->vel.x = -ball->vel.x;
-		ball->vel *= 1.1f;
+		ball->vel *= 1.2f;
 	}
 }
 
@@ -197,10 +214,10 @@ void Game::runGame()
 		leftPaddle->moveDown();
 	
 	// let the game objects update themselves
-	leftPaddle->move();
-	rightPaddle->move();
-	ball->move();
-
+	leftPaddle->update();
+	rightPaddle->update();
+	ball->update();
+	
 	// Check for collisions after each object moves
 	checkForCollisions();
 }
@@ -210,12 +227,20 @@ void Game::update()
 	// Get controller inputs first:
 	controller.update();
 
-	// Now if we're in the "JustScored" state, then
-	// the action pauses for a bit while the screen flashes
-	if( gameState == JustScored )
+	if( gameState == Title )
 	{
+		title->update();
+	}
+	else if( gameState == JustScored )
+	{
+		// Now if we're in the "JustScored" state, then
+		// the action pauses for a bit while the screen flashes
 		flashesRem--;
-		bkgColor = SDL_ColorMake( randInt(0,255), randInt(0,255), randInt(0,255), randInt(0,255) );
+		// change the color only every few frames
+		if( every(flashesRem,3) )
+		{
+			bkgColor = SDL_ColorMake( randInt(0,255), randInt(0,255), randInt(0,255), randInt(0,255) );
+		}
 		if( !flashesRem )
 		{
 			bkgColor = SDL_ColorMake( 0, 0, 40, 255 );
@@ -226,12 +251,14 @@ void Game::update()
 	{
 		runGame();
 	}
-	
 }
 
 void Game::draw()
 {
+	// Set the background's color,
 	sdl->setColor( bkgColor );
+
+	// clears the bkg to bkgColor
 	SDL_RenderClear( sdl->renderer );
 	
 	if( gameState == Title )
@@ -246,12 +273,12 @@ void Game::draw()
 		leftScoreSprite->draw();
 		rightScoreSprite->draw();
 	}
-
+	
 	if( gameState == Paused )
 	{
 		pausedText->draw();
 	}
-
+	
 	SDL_RenderPresent( sdl->renderer );
 }
 

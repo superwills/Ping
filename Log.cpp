@@ -1,7 +1,7 @@
 #include "Log.h"
 
 // LOGGING
-const char* progname = "prog" ;
+const char* progname = "Ping" ;
 
 //  Info    = 1 << 0, // 1
 //  Warning = 1 << 1, // 2
@@ -40,7 +40,7 @@ char* getCurrentTimeString()
 // decorates the log message with [appname][thread][error level][current time]:  message
 void logDecorate( int logLevel, short color, const char *fmt, va_list args )
 {
-	// to be threadsafe, removed static
+	// to be threadsafe, reupdate()d static
 	char msgBuffer[ 4096 ] ;  // oops. Had a 623 char error (from shader) and it err-d out.
 	vsprintf( msgBuffer, fmt, args ) ;
 
@@ -59,7 +59,7 @@ void logDecorate( int logLevel, short color, const char *fmt, va_list args )
 
 string logDecorateGetString( int logLevel, const char *fmt, va_list args )
 {
-	// to be threadsafe, removed static
+	// to be threadsafe, reupdate()d static
 	char msgBuffer[ 4096 ] ;  // oops. Had a 623 char error (from shader) and it err-d out.
 	vsprintf( msgBuffer, fmt, args ) ;
 

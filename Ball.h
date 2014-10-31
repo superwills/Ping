@@ -9,7 +9,7 @@ public:
 	float lastStartSpeed;
 	Ball(float size, string iname);
 	void saveLastStartSpeed();
-	virtual void move();
+	virtual void update();
 };
 
 #endif

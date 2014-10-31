@@ -7,15 +7,32 @@ using namespace std;
 #include "Sprite.h"
 #include <time.h>
 
+//      ___                       ___           ___     
+//     /\  \          ___        /\__\         /\  \    
+//    /::\  \        /\  \      /::|  |       /::\  \   
+//   /:/\:\  \       \:\  \    /:|:|  |      /:/\:\  \  
+//  /::\~\:\  \      /::\__\  /:/|:|  |__   /:/  \:\  \ 
+// /:/\:\ \:\__\  __/:/\/__/ /:/ |:| /\__\ /:/__/_\:\__\
+// \/__\:\/:/  / /\/:/  /    \/__|:|/:/  / \:\  /\ \/__/
+//      \::/  /  \::/__/         |:/:/  /   \:\ \:\__\  
+//       \/__/    \:\__\         |::/  /     \:\/:/  /  
+//                 \/__/         /:/  /       \::/  /   
+//                               \/__/         \/__/    
+// William Sherif
+// 30/10/2014
+//
 int main(int argc, char* args[])
 {
 	// Seed the random number generator with the __application start__ time.
-	// This ensures random numbers are truly random, not just fixed.
+	// This puts the "starting point" in the random number list,
+	// at a random position based on application start time
+	// that makes the random numbers generated different on 
+	// each run of the program
 	srand(time(0));
-
+	
 	// Create our SDL window, name it "Ping"
 	SDL sdl( "Ping", 800, 600 );
-
+	`
 	// Construct our Game object, to retain gamestate information
 	Game game( sdl );
 
@@ -41,7 +58,7 @@ int main(int argc, char* args[])
 			}
 		}
 		
-		// Update the game, move the sprites, etc
+		// Update the game, update() the sprites, etc
 		game.update();
 
 		// Draw out the new state

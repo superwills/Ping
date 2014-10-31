@@ -55,7 +55,7 @@ public:
 	void boundLR();
 	void show();
 	void hide();
-	virtual void move();
+	virtual void update();
 	virtual void draw();
 	
 private:

@@ -113,7 +113,7 @@ void Sprite::hide()
 	hidden = true;
 }
 
-void Sprite::move()
+void Sprite::update()
 {
 	rect.xy() += vel;
 	boundTB();
