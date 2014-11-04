@@ -2,8 +2,7 @@
 #include "Sprite.h"
 
 // ctor requires just window width & height
-SDL::SDL(const char* title, int windowWidth, int windowHeight):window(0), screenSurface(0), renderer(0),
-size(windowWidth, windowHeight)
+SDL::SDL(const char* title, int windowWidth, int windowHeight):window(0), screenSurface(0), renderer(0)
 {
 	Sprite::sdl = this;
 	
@@ -12,6 +11,15 @@ size(windowWidth, windowHeight)
 		error( "SDL init error: %s\n", SDL_GetError() );
 		exit( 1 );
 	}
+	
+	// Start up the audio mixer
+	if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+	{
+		error( "SDL_mixer Error: %s\n", Mix_GetError() );
+	}
+	
+	// Start up true-type fonts
+	TTF_Init();
 
 	window = SDL_CreateWindow( title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		windowWidth, windowHeight, SDL_WINDOW_SHOWN );
@@ -98,23 +106,7 @@ void SDL::playSound( string soundFile )
 
 SDL_Surface* SDL::loadSurface( string filename )
 {
-	SDL_Surface* opSurface = NULL;
-	SDL_Surface* rawSurface = IMG_Load( filename.c_str() );
-	if( !rawSurface )
-	{
-		error( "Couldn't load `%s`! Error: %s\n", filename.c_str(), IMG_GetError() );
-	}
-	else
-	{
-		// Convert the loaded surface to same as screen surface format
-		opSurface = SDL_ConvertSurface( rawSurface, screenSurface->format, NULL );
-		if( !opSurface )
-		{
-			error( "Unable to optimize image %s! Error: %s\n", filename.c_str(), SDL_GetError() );
-		}
-		SDL_FreeSurface( rawSurface );
-	}
-	return opSurface;
+	return IMG_Load( filename.c_str() );
 }
 
 SDL_Texture* SDL::loadTexture( string filename )
@@ -142,11 +134,13 @@ SDL_Texture* SDL::makeText( TTF_Font* font, string text, SDL_Color color )
 
 Mix_Music* SDL::loadMusic( string filename )
 {
-	if( musics.find(filename) != musics.end() )
+	map<string,Mix_Music*>::iterator iter = musics.find(filename);
+	if( iter != musics.end() )
 	{
-		error( "Music %s already loaded", filename.c_str() );
-		return 0;
+		warning( "Music `%s` already loaded", filename.c_str() );
+		return iter->second;
 	}
+
 	Mix_Music *music = Mix_LoadMUS( filename.c_str() ) ;
 	musics[filename] = music;
 	return music;
@@ -154,10 +148,11 @@ Mix_Music* SDL::loadMusic( string filename )
 
 Mix_Chunk* SDL::loadWavSound( string waveFilename )
 {
-	if( sfx.find(waveFilename) != sfx.end() )
+	map<string,Mix_Chunk*>::iterator iter = sfx.find(waveFilename);
+	if( iter != sfx.end() )
 	{
-		error( "Sound `%s` already loaded", waveFilename.c_str() );
-		return sfx[waveFilename];
+		warning( "Sound `%s` already loaded", waveFilename.c_str() );
+		return iter->second;
 	}
 
 	Mix_Chunk *sound = Mix_LoadWAV( waveFilename.c_str() ) ;

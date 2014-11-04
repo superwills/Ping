@@ -9,18 +9,10 @@ Game::Game( SDL& iSdl ):
 	sdl = &iSdl;
 	gameState = Title;
 
-	// Start up true-type fonts
-	TTF_Init();
 	font = TTF_OpenFont("Nobile-Bold.ttf", 128);
 	if(!font)
 	{
 		error("TTF_OpenFont: %s", TTF_GetError());
-	}
-	
-	// Start up the audio mixer
-	if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
-	{
-		error( "SDL_mixer Error: %s\n", Mix_GetError() );
 	}
 	
 	// Create game sprites
@@ -84,31 +76,34 @@ Game::GameState Game::getState()
 
 void Game::setState( GameState newState )
 {
-	GameState prevState = gameState;
+	prevState = gameState;
+	
 	switch( newState )
 	{
 	case Title:
 		// start the title music
 		sdl->playMusic( "song 91 7.ogg" );
 	 	break;
-
+	
 	case Running:
+	case JustScored:
 		// game song
 		// if prevstate was Running, don't restart the music
 		if( prevState == Paused )
 		{
 			Mix_ResumeMusic(); // unpause the music
 		}
-		else if( prevState != JustScored )
+		else if( prevState == Title )
 		{
+			// start the in-game music
 			sdl->playMusic( "song 81 6.flac" );
 		}
 		break;
-
+	
 	case Paused:
 		Mix_PauseMusic();
 		break;
-
+	
 	case Exiting:
 		break;
 	}
@@ -120,7 +115,7 @@ void Game::togglePause()
 {
 	if( gameState == Paused )
 	{
-		setState( Running );
+		setState( prevState ); //go back to the previous state
 		pausedText->hide();
 	}
 	else

@@ -26,7 +26,6 @@ class SDL
 	map<string, SDL_Texture*> texes;
 	map<string, Mix_Music*> musics;
 	map<string, Mix_Chunk*> sfx;
-	Vector2f size;
 
 public:
 	SDL_Window* window;

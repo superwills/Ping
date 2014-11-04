@@ -34,6 +34,9 @@ private:
 	
 	// The font we use to draw the scores
 	TTF_Font* font;
+	
+	// The previous state the game was in (used for unpausing)
+	GameState prevState;
 
 	// what mode the game is running in
 	GameState gameState;

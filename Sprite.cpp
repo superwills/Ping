@@ -134,6 +134,7 @@ void Sprite::draw()
 	else
 	{
 		// Convert our floating pt rect to an int-based rect
+		SDL_Rect r = {rect.x, rect.y, rect.w, rect.h};
 		sdl->drawTexture( r, tex );
 	}
 }
