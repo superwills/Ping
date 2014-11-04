@@ -37,9 +37,8 @@ public:
 	SDL(const char *title, int windowWidth, int windowHeight);
 	~SDL();
 	
-	inline Vector2f getSize()
-	{
-		return size;
+	inline Vector2f getSize(){
+		return Vector2f( screenSurface->w, screenSurface->h );
 	}
 	void setColor( SDL_Color color );
 
@@ -47,6 +46,7 @@ public:
 	void line( int startX, int startY, int endX, int endY, SDL_Color color );
 	void rect( int x, int y, int w, int h, SDL_Color color );
 	void fillRect( int x, int y, int w, int h, SDL_Color color );
+	void drawTexture( SDL_Rect rect, SDL_Texture* tex );
 	void playMusic( string musicFile );
 	void playSound( string soundFile );
 	

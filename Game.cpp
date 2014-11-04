@@ -4,8 +4,7 @@
 Game::Game( SDL& iSdl ):
 	leftScoreValue(0), rightScoreValue(0), leftScoreSprite(0), rightScoreSprite(0)
 {
-	// Link up the static reference to this Game object
-	// inside Sprite:
+	// Link up the static reference to this Game object inside Sprite:
 	Sprite::game = this;
 	sdl = &iSdl;
 	gameState = Title;
@@ -30,7 +29,7 @@ Game::Game( SDL& iSdl ):
 
 	leftPaddle = new Paddle( Vector2f(25,100), 10, "left paddle" );
 	rightPaddle = new Paddle( Vector2f(25,100), 10, "right paddle" );
-	title = new TitleScreen( "title", "title.png" );
+	title = new TitleScreen( "title", "title.jpg" );
 	pausedText = Sprite::Text( font, "pause", SDL_ColorMake( 200, 200, 0, 200 ) );
 	pausedText->setCenter( sdl->getSize()/2 );
 
@@ -166,7 +165,7 @@ void Game::checkForCollisions()
 	// check the ball's rect against the paddle's rects
 	if( ball->rect.hit( leftPaddle->rect ) )
 	{
-		sdl->playSound( makeString( "ping%d.wav", randInt(0,4) ) );
+		sdl->playSound( makeString( "ping%d.wav", randInt(0,2) ) );
 		
 		// Push the ball off the paddle, so they don't interpenetrate
 		float overlap = leftPaddle->rect.right() - ball->rect.left();
@@ -182,7 +181,7 @@ void Game::checkForCollisions()
 
 	if( ball->rect.hit( rightPaddle->rect ) )
 	{
-		sdl->playSound( makeString( "ping%d.wav", randInt(0,4) ) );
+		sdl->playSound( makeString( "ping%d.wav", randInt(0,2) ) );
 		float overlap = rightPaddle->rect.left() - ball->rect.right();
 		ball->rect.x += overlap;
 		

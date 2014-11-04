@@ -69,7 +69,7 @@ void Sprite::scale( float s )
 	rect.size() *= s;
 }
 
-void Sprite::boundTB()
+void Sprite::bounceTopAndBottom()
 {
 	if( rect.top() < 0 )
 	{
@@ -85,7 +85,7 @@ void Sprite::boundTB()
 	}
 }
 
-void Sprite::boundLR()
+void Sprite::bounceLeftAndRight()
 {
 	// ensure stays within bounds of world
 	// two of these can happen simultaneously, which is why no else is used
@@ -116,8 +116,8 @@ void Sprite::hide()
 void Sprite::update()
 {
 	rect.xy() += vel;
-	boundTB();
-	boundLR();
+	bounceTopAndBottom();
+	bounceLeftAndRight();
 }
 
 void Sprite::draw()
@@ -134,8 +134,7 @@ void Sprite::draw()
 	else
 	{
 		// Convert our floating pt rect to an int-based rect
-		SDL_Rect r = { (int)rect.x, (int)rect.y, (int)rect.w, (int)rect.h };
-		SDL_RenderCopy( sdl->renderer, tex, NULL, &r );
+		sdl->drawTexture( r, tex );
 	}
 }
 

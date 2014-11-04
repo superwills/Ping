@@ -10,11 +10,11 @@ Paddle::Paddle(Vector2f size, float iSpeed, string iname):Sprite(iname)
 void Paddle::moveDown()
 {
 	rect.y += speed;
-	boundTB();
+	bounceTopAndBottom();
 }
 
 void Paddle::moveUp()
 {
 	rect.y -= speed;
-	boundTB();
+	bounceTopAndBottom();
 }

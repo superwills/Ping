@@ -23,7 +23,7 @@ void Ball::update()
 	rect.xy() += vel;
 	
 	// don't exit top or bottom
-	boundTB();
+	bounceTopAndBottom();
 	
 	if( rect.left() < 0 )
 	{

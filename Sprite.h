@@ -51,8 +51,8 @@ public:
 	}
 	void setSize( Vector2f size );
 	void scale( float s );
-	void boundTB();
-	void boundLR();
+	void bounceTopAndBottom();
+	void bounceLeftAndRight();
 	void show();
 	void hide();
 	virtual void update();

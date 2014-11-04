@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{64813200-b76f-4806-a481-7f81d389c3e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDL">
+      <UniqueIdentifier>{ff386601-22b8-49ad-8121-e6a6c8066026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{29143dcc-ae41-42b2-9f85-5424c4ffa35a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Ball.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="Paddle.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScreen.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="Colors.cpp">
+      <Filter>SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLO.cpp">
+      <Filter>SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="StdWilUtil.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Ball.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="Paddle.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScreen.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="Colors.h">
+      <Filter>SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLO.h">
+      <Filter>SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="math_ext.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="RectF.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="StdWilUtil.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="Vectorf.h">
+      <Filter>util</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

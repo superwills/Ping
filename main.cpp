@@ -32,7 +32,7 @@ int main(int argc, char* args[])
 	
 	// Create our SDL window, name it "Ping"
 	SDL sdl( "Ping", 800, 600 );
-	`
+	
 	// Construct our Game object, to retain gamestate information
 	Game game( sdl );
 
@@ -41,7 +41,9 @@ int main(int argc, char* args[])
 	{
 		// Read controller input
 		SDL_Event e;
-		while( SDL_PollEvent( &e ) != 0 )
+
+		// SDL_PollEvent returns nonzero while there are more events
+		while( SDL_PollEvent( &e ) )
 		{
 			if( e.type == SDL_QUIT || e.key.keysym.scancode == SDL_SCANCODE_ESCAPE )
 			{

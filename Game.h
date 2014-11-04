@@ -18,10 +18,11 @@ private:
 	// The SDL object, which allows us to draw and play sounds
 	SDL* sdl;
 	
-	// The 3 game objects we have in the game
+	// Need a ball and paddles for this game
+	Ball* ball;
 	Paddle* leftPaddle;
 	Paddle* rightPaddle;
-	Ball* ball;
+
 	TitleScreen* title;
 	Sprite* pausedText;
 	SDL_Color bkgColor;	// the current background color

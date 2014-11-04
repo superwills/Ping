@@ -67,6 +67,11 @@ void SDL::fillRect( int x, int y, int w, int h, SDL_Color color )
 	SDL_RenderFillRect( renderer, &rect );
 }
 
+void SDL::drawTexture( SDL_Rect rect, SDL_Texture* tex )
+{
+	SDL_RenderCopy( renderer, tex, NULL, &rect );
+}
+
 void SDL::playMusic( string musicFile )
 {
 	/// stop all other music
