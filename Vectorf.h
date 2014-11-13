@@ -166,6 +166,9 @@ union Vector2f
 		return -1.f <= x && x <= 1.f && 
 			-1.f <= y && y <= 1.f ;
 	}
+  #ifdef __APPLE__
+  #define _isnan isnan
+  #endif
 	inline bool isNaN() const {
 		return _isnan(x) || _isnan(y) ;
 	}
@@ -183,7 +186,7 @@ union Vector2f
 			y = HUGE ;
 		return *this ;
 	}
-
+  
 	// Exact equality
 	inline bool operator==( const Vector2f& o ) const{
 		return x==o.x && y==o.y ;

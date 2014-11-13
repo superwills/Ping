@@ -1,7 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <SDL.h>
 #include "SDLO.h"
 #include "Sprite.h"
 #include "Paddle.h"

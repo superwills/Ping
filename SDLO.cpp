@@ -31,11 +31,26 @@ SDL::SDL(const char* title, int windowWidth, int windowHeight):window(0), screen
 	
 	// retrieve the surface (collection of pixels) of the window
 	screenSurface = SDL_GetWindowSurface( window );
-	
+	if( !screenSurface )
+    {
+    	error( "Could not create screenSurface %s", SDL_GetError() );
+    }
+    
 	// create a hardware accelerated renderer
 	// that displays only once per refresh interval
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
-
+	if( !renderer )
+    {
+		error( "Could not create renderer %s", SDL_GetError() );
+	    renderer = SDL_GetRenderer( window );
+        if( renderer )
+        {
+        	// delete default to get one with vsync on
+        	SDL_DestroyRenderer( renderer );
+    		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+        }
+    }
+    
 	// Turn on alpha blending
 	SDL_SetRenderDrawBlendMode( renderer, SDL_BLENDMODE_BLEND );
 }
@@ -106,7 +121,9 @@ void SDL::playSound( string soundFile )
 
 SDL_Surface* SDL::loadSurface( string filename )
 {
-	return IMG_Load( filename.c_str() );
+	SDL_Surface* surf = IMG_Load( filename.c_str() );
+	if( !surf ) error( "Couldn't load surface `%s`!", filename.c_str() );
+    return surf;
 }
 
 SDL_Texture* SDL::loadTexture( string filename )
@@ -119,6 +136,7 @@ SDL_Texture* SDL::loadTexture( string filename )
 	}
 
 	SDL_Texture* tex = SDL_CreateTextureFromSurface( renderer, loadSurface(filename) );
+    if( !tex ) error( "loadTexture: SDL_CreateTextureFromSurface failed %s %s", filename.c_str(), SDL_GetError() );
 	SDL_SetTextureBlendMode( tex, SDL_BLENDMODE_BLEND );
 	texes[ filename ] = tex;
 	return tex;
@@ -126,8 +144,10 @@ SDL_Texture* SDL::loadTexture( string filename )
 
 SDL_Texture* SDL::makeText( TTF_Font* font, string text, SDL_Color color )
 {
-    SDL_Surface *messagesurf = TTF_RenderText_Solid( font, text.c_str(), color );
+	SDL_Surface *messagesurf = TTF_RenderText_Solid( font, text.c_str(), color );
+    if( !messagesurf ) error( "TTF_RenderText_Solid failed %s", text.c_str() );
 	SDL_Texture* texture = SDL_CreateTextureFromSurface( renderer, messagesurf );
+    if( !texture ) error( "TTF_RenderText_Solid texture failed %s", text.c_str() );
 	SDL_FreeSurface( messagesurf );
 	return texture;
 }
@@ -142,6 +162,7 @@ Mix_Music* SDL::loadMusic( string filename )
 	}
 
 	Mix_Music *music = Mix_LoadMUS( filename.c_str() ) ;
+	if( !music ) error( "Couldn't load music `%s`!", filename.c_str() );
 	musics[filename] = music;
 	return music;
 }
@@ -156,6 +177,7 @@ Mix_Chunk* SDL::loadWavSound( string waveFilename )
 	}
 
 	Mix_Chunk *sound = Mix_LoadWAV( waveFilename.c_str() ) ;
+	if( !sound ) error( "Couldn't load sound `%s`!", waveFilename.c_str() );
 	sfx[waveFilename] = sound;
 	return sound;
 }

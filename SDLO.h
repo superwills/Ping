@@ -4,12 +4,16 @@
 #include <map>
 using namespace std;
 
+#ifdef __APPLE__
+#include <SDL2/SDL.h>
+#include <SDL2_image/SDL_image.h>
+#include <SDL2_mixer/SDL_mixer.h>
+#include <SDL2_ttf/SDL_ttf.h>
+#else
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
-#include "Log.h"
-#include "Vectorf.h"
 
 // If you link the SDL libraries here, you don't
 // have to worry about setting the project settings
@@ -18,6 +22,10 @@ using namespace std;
 #pragma comment( lib, "SDL2_image.lib" )
 #pragma comment( lib, "SDL2_mixer.lib" )
 #pragma comment( lib, "SDL2_ttf.lib" )
+#endif
+
+#include "Log.h"
+#include "Vectorf.h"
 
 // Stores everything to do with SDL, and game assets
 class SDL
